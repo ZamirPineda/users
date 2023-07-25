@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "spring.mvc.validation.enabled",
+      "type": "java.lang.String",
+      "description": "Description for spring.mvc.validation.enabled."
+    },
+    {
+      "name": "spring.mvc.validation.fail-on-field-errors",
+      "type": "java.lang.String",
+      "description": "Description for spring.mvc.validation.fail-on-field-errors."
+    }
+  ]
+}

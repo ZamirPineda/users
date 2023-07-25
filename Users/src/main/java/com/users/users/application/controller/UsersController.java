@@ -1,17 +1,22 @@
 package com.users.users.application.controller;
 
 import com.users.users.application.dto.ResponseDTO;
+import com.users.users.application.dto.ErrorResponse;
 import com.users.users.application.dto.UsersDTO;
 import com.users.users.application.service.IUsersService;
 import com.users.users.infraestructure.persistence.model.UsersEntity;
 import com.users.users.infraestructure.persistence.repository.IRepository;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,8 +34,20 @@ public class UsersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createUser(@RequestBody UsersDTO user) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UsersDTO user, BindingResult bindingResult) {
         log.info("Aqui inicia el post{}", user);
+
+        if (bindingResult.hasErrors()) {
+            // Si hay errores, construir una respuesta personalizada con los mensajes de error
+            List<String> errorMessages = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            String err = errorMessages.toString();
+            ErrorResponse errorResponse = new ErrorResponse(err);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+        }
+
         // Validar si el correo electrónico ya existe en la base de datos
         if (repository.existsByMail(user.getMail())) {
             // Correo electrónico ya existe en la base de datos, devolver conflicto (409)
