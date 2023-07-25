@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import jakarta.validation.Valid;
 
 @Data
 @AllArgsConstructor
@@ -15,5 +16,6 @@ public class UsersDTO {
     private String username;
     private String mail;
     private String password;
+    @Valid
     private InfoUsersDTO infoUsersDTO;
 }
