@@ -3,14 +3,12 @@ package com.users.users.application.controller;
 import com.users.users.application.dto.ResponseDTO;
 import com.users.users.application.dto.UsersDTO;
 import com.users.users.application.service.IUsersService;
-import com.users.users.infraestructure.persistence.model.InfoUsersEntity;
 import com.users.users.infraestructure.persistence.model.UsersEntity;
 import com.users.users.infraestructure.persistence.repository.IRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,22 +43,7 @@ public class UsersController {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
 
-        // Si el correo electrónico y dni, no existe, proceder con la creación del usuario
-        //ResponseDTO<?> usersEntity = service.createUser(user);
-        /***
-        UsersEntity usersEntity = new UsersEntity();
-        InfoUsersEntity infoUsersEntity = new InfoUsersEntity();
-        usersEntity.setUsername(user.getUsername());
-        usersEntity.setName(user.getName());
-        usersEntity.setMail(user.getMail());
-        usersEntity.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        infoUsersEntity.setBirthday(user.getInfoUsersEntity().getBirthday());
-        infoUsersEntity.setDni(user.getInfoUsersEntity().getDni());
-        usersEntity.setInfoUsersEntity(infoUsersEntity);
-        log.info("POST objeto en BD: {}", usersEntity);
-        repository.save(usersEntity);
-         */
-        //return ResponseEntity.status(HttpStatus.CREATED).body(usersEntity);
+        // Si el correo electrónico y dni, no existe, proceder con la creación del usuario en el UsersServiceImpl
         return new ResponseEntity<>(service.createUser(user), HttpStatus.CREATED);
     }
 
@@ -128,7 +111,7 @@ public class UsersController {
     }
 
     @DeleteMapping("/all")
-    public ResponseEntity<Void> deleteAll(){
+    public ResponseEntity<Void> deleteAll() {
         //Metodo exclusivo para eliminar información obsoleta en general
         repository.deleteAll();
         return ResponseEntity.noContent().build();

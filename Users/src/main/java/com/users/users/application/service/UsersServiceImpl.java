@@ -8,8 +8,6 @@ import com.users.users.infraestructure.persistence.model.UsersEntity;
 import com.users.users.infraestructure.persistence.repository.IRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +31,7 @@ public class UsersServiceImpl implements IUsersService {
          if (usersEntityOptional.isPresent()) {
          UsersEntity usersEntity = usersEntityOptional.get();
          responseDto.setData(usersMapper.toUsersDto(usersEntity));
-         }*/
+         }***/
         return responseDto;
     }
 
@@ -41,22 +39,20 @@ public class UsersServiceImpl implements IUsersService {
     public ResponseDTO<UsersDTO> createUser(UsersDTO user) {
         log.info("POST objeto de entrada: {}", user);
         ResponseDTO<UsersDTO> responseDto = new ResponseDTO<>();
-        try {
-            UsersEntity usersEntity = new UsersEntity();
-            InfoUsersEntity infoUsersEntity = new InfoUsersEntity();
-            usersEntity.setUsername(user.getUsername());
-            usersEntity.setName(user.getName());
-            usersEntity.setMail(user.getMail());
-            usersEntity.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-            infoUsersEntity.setBirthday(user.getInfoUsersDTO().getBirthday());
-            infoUsersEntity.setDni(user.getInfoUsersDTO().getDni());
-            usersEntity.setInfoUsersEntity(infoUsersEntity);
-            repository.save(usersEntity);
-            log.info("Save DB createUser {}", usersEntity);
-        } catch (Exception e) {
-            responseDto.setCode("01");
-            responseDto.setMessage("Ningun item coincide con el parametro ingresado");
-        }
+        UsersEntity usersEntity = new UsersEntity();
+        InfoUsersEntity infoUsersEntity = new InfoUsersEntity();
+        usersEntity.setUsername(user.getUsername());
+        usersEntity.setName(user.getName());
+        usersEntity.setMail(user.getMail());
+        usersEntity.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        infoUsersEntity.setBirthday(user.getInfoUsersDTO().getBirthday());
+        infoUsersEntity.setDni(user.getInfoUsersDTO().getDni());
+        usersEntity.setInfoUsersEntity(infoUsersEntity);
+        repository.save(usersEntity);
+        log.info("Save DB createUser {}", usersEntity);
+        responseDto.setData(user);
+        log.info("ResponseDTO of POST {}", responseDto);
+
         return responseDto;
     }
 }
