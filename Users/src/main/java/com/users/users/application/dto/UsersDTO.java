@@ -1,6 +1,5 @@
 package com.users.users.application.dto;
 
-import com.users.users.infraestructure.persistence.model.InfoUsersEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
