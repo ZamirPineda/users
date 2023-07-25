@@ -34,19 +34,8 @@ public class UsersController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> createUser(@Valid @RequestBody UsersDTO user, BindingResult bindingResult) {
+    public ResponseEntity<?> createUser(@Valid @RequestBody UsersDTO user) {
         log.info("Aqui inicia el post{}", user);
-
-        if (bindingResult.hasErrors()) {
-            // Si hay errores, construir una respuesta personalizada con los mensajes de error
-            List<String> errorMessages = new ArrayList<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMessages.add(error.getDefaultMessage());
-            }
-            String err = errorMessages.toString();
-            ErrorResponse errorResponse = new ErrorResponse(err);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
-        }
 
         // Validar si el correo electrónico ya existe en la base de datos
         if (repository.existsByMail(user.getMail())) {
